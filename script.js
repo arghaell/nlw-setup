@@ -10,7 +10,25 @@ function add() {
   const dayExists = nlwSetup.dayExists(today);
 
   if (dayExists) {
-    alert("Day already logged");
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    if (localStorage.getItem("lastDay")) {
+      let i =
+        new Date(localStorage.getItem("lastDay")).getTime() -
+        new Date().getTime();
+      let diferenceInDays = Math.ceil(i / (1000 * 3600 * 24));
+      let newDay = new Date();
+      newDay.setDate(newDay.getDate() + diferenceInDays + 1);
+
+      nlwSetup.addDay(newDay.toLocaleDateString("pt-br").slice(0, -5));
+      localStorage.setItem("lastDay", newDay);
+      alert("Day logged sucesfully");
+      return;
+    }
+    localStorage.setItem("lastDay", tomorrow);
+    nlwSetup.addDay(tomorrow.toLocaleDateString("pt-br").slice(0, -5));
+    alert("Day logged sucesfully");
     return;
   }
   alert("Day logged sucesfully");
